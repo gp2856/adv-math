@@ -24,6 +24,8 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "Star.h"
+#include "CoordinateTransformer.h"
+#include "Entity.h"
 
 
 class Game
@@ -42,7 +44,9 @@ private:
 private:
 	MainWindow& wnd;
 	Graphics gfx;
+	CoordinateTransformer ct;
 	/********************************/
 	/*  User Variables              */
 	/********************************/
+	Entity e1;
 };
