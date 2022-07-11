@@ -42,4 +42,14 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	if (wnd.mouse.LeftIsPressed())
+	{
+		gfx.DrawLine({ 50.0f, 50.0f }, { (float)wnd.mouse.GetPosX(), (float)wnd.mouse.GetPosY() }, Colors::Yellow);
+	}
+	auto poly = Star::Make(150.0f, 75.0f, 8);
+	for (auto& v : poly)
+	{
+		v += Vec2{ 200.0f,200.0f };
+	}
+	gfx.DrawClosedPolyline(poly, Colors::Red);
 }
