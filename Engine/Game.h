@@ -28,6 +28,7 @@
 #include "Entity.h"
 #include "Camera.h"
 #include <vector>
+#include <random>
 
 
 class Game
@@ -54,4 +55,6 @@ private:
 	std::vector<Entity> entities;
 	bool camDrag;
 	Vec2 clickPos;
+	float starfieldWidth;
+	float starfieldHeight;
 };

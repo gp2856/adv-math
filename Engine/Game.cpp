@@ -28,15 +28,23 @@ Game::Game( MainWindow& wnd )
 	ct(gfx),
 	cam(ct),
 	camDrag(false),
-	clickPos({ 0.0f, 0.0f })
+	clickPos({ 0.0f, 0.0f }),
+	starfieldHeight(4000.0f),
+	starfieldWidth(4000.0f)
 {
-	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 460.0f, 0.0f });
-	entities.emplace_back(Star::Make(150.0f, 50.0f), Vec2{ 150.0f, 300.0f });
-	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 250.0f, -200.0f });
-	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ -250.0f, 200.0f });
-	entities.emplace_back(Star::Make(150.0f, 50.0f), Vec2{ 0.0f, 0.0f });
-	entities.emplace_back(Star::Make(200.0f, 50.0f), Vec2{ -150.0f, -300.0f });
-	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 400.0f, 300.0f });
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<> randomFlares(4, 20);
+	std::uniform_int_distribution<> numberOfStars(100, 500);
+	std::uniform_real_distribution<> randomPosX(-starfieldWidth, starfieldWidth);
+	std::uniform_real_distribution<> randomPosY(-starfieldHeight, starfieldHeight);
+
+	for (int i = 0; i < numberOfStars(rng); i++)
+	{
+		Entity star = { Star::Make(150.0f, 50.0f, randomFlares(rng)), Vec2{ (float)std::floor(randomPosX(rng)), (float)std::floor(randomPosY(rng)) } };
+		entities.emplace_back(star);
+	}
+
 }
 
 void Game::Go()
@@ -49,7 +57,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	const float speed = 6.0f;
+	const float speed = 12.0f;
 	if (wnd.kbd.KeyIsPressed(0x53))
 	{
 		cam.MoveBy({ 0.0f, -speed });
