@@ -26,6 +26,8 @@
 #include "Star.h"
 #include "CoordinateTransformer.h"
 #include "Entity.h"
+#include "Camera.h"
+#include <vector>
 
 
 class Game
@@ -48,5 +50,6 @@ private:
 	/********************************/
 	/*  User Variables              */
 	/********************************/
-	Entity e1;
+	Camera cam;
+	std::vector<Entity> entities;
 };

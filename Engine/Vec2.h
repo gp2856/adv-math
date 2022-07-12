@@ -42,6 +42,10 @@ public:
 	{
 		return *this = *this - rhs;
 	}
+	Vec2_ operator-() const
+	{
+		return Vec2_(-x, -y);
+	}
 	T GetLength() const
 	{
 		return (T)std::sqrt(GetLengthSq());
