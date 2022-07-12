@@ -26,7 +26,9 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	ct(gfx),
-	cam(ct)
+	cam(ct),
+	camDrag(false),
+	clickPos({ 0.0f, 0.0f })
 {
 	entities.emplace_back(Star::Make(100.0f, 50.0f), Vec2{ 460.0f, 0.0f });
 	entities.emplace_back(Star::Make(150.0f, 50.0f), Vec2{ 150.0f, 300.0f });
@@ -47,7 +49,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	const float speed = 3.0f;
+	const float speed = 6.0f;
 	if (wnd.kbd.KeyIsPressed(0x53))
 	{
 		cam.MoveBy({ 0.0f, -speed });
@@ -76,6 +78,23 @@ void Game::UpdateModel()
 		{
 			cam.SetScale(cam.GetScale() * .95f);
 		}
+		if (e.GetType() == Mouse::Event::Type::LPress && camDrag != true)
+		{
+			camDrag = true;
+			clickPos = { (float)wnd.mouse.GetPosX(), (float)wnd.mouse.GetPosY() };
+		}
+		if (e.GetType() == Mouse::Event::Type::LRelease && camDrag)
+		{
+			camDrag = false;
+		}
+		if (e.GetType() == Mouse::Event::Type::Move && camDrag)
+		{
+			Vec2 newPos = { (float)wnd.mouse.GetPosX(), (float)wnd.mouse.GetPosY() };
+			newPos -= clickPos;
+			newPos.Normalize();
+			cam.MoveBy({ -(speed * newPos.x), speed * newPos.y });
+		}
+		
 	}
 }
 

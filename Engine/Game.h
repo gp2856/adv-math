@@ -52,4 +52,6 @@ private:
 	/********************************/
 	Camera cam;
 	std::vector<Entity> entities;
+	bool camDrag;
+	Vec2 clickPos;
 };
