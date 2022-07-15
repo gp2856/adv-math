@@ -28,15 +28,9 @@ public:
 		translation.x *= scale_in_x;
 		translation.y *= scale_in_y;
 	}
-	void Render(Graphics& gfx)
+	void Render(Graphics& gfx) const
 	{
-		for (auto& v : model)
-		{
-			v.x *= scale_x;
-			v.y *= scale_y;
-			v += translation;
-		}
-		gfx.DrawClosedPolyline(*model,translation, scale_x, scale_y c);
+		gfx.DrawClosedPolyline(*model,translation, scale_x, scale_y, c);
 	}
 private:
 	Color c;

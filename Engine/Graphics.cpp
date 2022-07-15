@@ -375,7 +375,7 @@ void Graphics::DrawClosedPolyline(const std::vector<Vec2>& verts, Color c)
 	DrawLine(verts.back(), verts.front(), c);
 }
 
-void Graphics::DrawClosedPolyline(const std::vector<Vec2>& verts, const Vec2& translation, const float scale_x, const float scale_y)
+void Graphics::DrawClosedPolyline(const std::vector<Vec2>& verts, const Vec2& translation, const float scale_x, const float scale_y, Color c)
 {
 	const auto xform = [&](Vec2 v)
 	{
