@@ -1,5 +1,6 @@
 #pragma once
 #include "CoordinateTransformer.h"
+#include "RectF.h"
 
 class Camera
 {
@@ -33,6 +34,15 @@ public:
 		drawable.Translate(-pos);
 		drawable.Scale(scale);
 		ct.Draw(drawable);
+	}
+	RectF GetViewportRect() const
+	{
+		const float zoom = 1.0f / scale;
+		return RectF::FromCenter(
+			pos,
+			float(Graphics::ScreenWidth / 2) * zoom,
+			float(Graphics::ScreenHeight / 2) * zoom
+		);
 	}
 private:
 	float scale = 1.0f;
