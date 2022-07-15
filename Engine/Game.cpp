@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include <algorithm>
 
 Game::Game( MainWindow& wnd )
 	:
@@ -28,21 +29,31 @@ Game::Game( MainWindow& wnd )
 	ct(gfx),
 	cam(ct),
 	camDrag(false),
-	clickPos({ 0.0f, 0.0f }),
-	starfieldHeight(4000.0f),
-	starfieldWidth(4000.0f)
+	clickPos({ 0.0f, 0.0f })
 {
-	std::random_device dev;
-	std::mt19937 rng(dev());
-	std::uniform_int_distribution<> randomFlares(4, 20);
-	std::uniform_int_distribution<> numberOfStars(100, 500);
-	std::uniform_real_distribution<> randomPosX(-starfieldWidth, starfieldWidth);
-	std::uniform_real_distribution<> randomPosY(-starfieldHeight, starfieldHeight);
+	std::mt19937 rng(std::random_device{}());
+	std::uniform_real_distribution<float> xDist(-worldWidth / 2.0f, worldWidth / 2.0f);
+	std::uniform_real_distribution<float> yDist(-worldHeight / 2.0f, worldHeight / 2.0f);
+	std::normal_distribution<float> radDist(meanStarRadius, devStarRadius);
+	std::normal_distribution<float> ratDist(meanInnerRatio, devInnerRatio);
+	std::normal_distribution<float> flareDist(meanFlares, devFlares);
+	const Color colors[] = { Colors::Red, Colors::White, Colors::Blue, Colors::Cyan, Colors::Yellow };
+	std::uniform_int_distribution<size_t> colorSampler(0, std::end(colors) - std::begin(colors));
 
-	for (int i = 0; i < numberOfStars(rng); i++)
+	while (stars.size() < nStars)
 	{
-		Entity star = { Star::Make(150.0f, 50.0f, randomFlares(rng)), Vec2{ (float)std::floor(randomPosX(rng)), (float)std::floor(randomPosY(rng)) } };
-		entities.emplace_back(star);
+		const auto rad = std::clamp(radDist(rng), minStarRadius, maxStarRadius);
+		const Vec2 pos = { xDist(rng), yDist(rng) };
+		if (std::any_of(stars.begin(), stars.end(), [&](const StarBro& sb)
+			{ return (sb.GetPos() - pos).GetLength() < rad + sb.GetRadius(); }))
+		{
+			continue;
+		}
+
+		const auto rat = std::clamp(ratDist(rng), minInnerRatio, maxInnerRatio);
+		const Color c = colors[colorSampler(rng)];
+		const int nFlares = std::clamp((int)flareDist(rng), minFlares, maxFlares);
+		stars.emplace_back(pos, rad, rat, nFlares, c);
 	}
 
 }
@@ -108,8 +119,8 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	for (const auto& entity : entities)
+	for (const auto& star : stars)
 	{
-		cam.Draw(entity.GetDrawable());
+		cam.Draw(star.GetDrawable());
 	}
 }
