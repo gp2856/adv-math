@@ -41,6 +41,10 @@ public:
 		d.Translate(pos);
 		return d;
 	}
+	void SetColor(Color c_in)
+	{
+		c = c_in;
+	}
 
 	
 private:

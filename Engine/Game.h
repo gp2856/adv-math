@@ -30,8 +30,7 @@
 #include <vector>
 #include <random>
 #include "StarBro.h"
-
-
+#include "FrameTimer.h"
 
 class Game
 {
@@ -53,7 +52,7 @@ private:
 	/********************************/
 	/*  User Variables              */
 	/********************************/
-	Camera cam;
+	
 	std::vector<Entity> entities;
 	bool camDrag;
 	Vec2 clickPos;
@@ -73,6 +72,20 @@ private:
 	static constexpr float devFlares = 2.0f;
 	static constexpr int minFlares = 3;
 	static constexpr int maxFlares = 10;
-
+	static constexpr float meanColorFreq = 1.8f;
+	static constexpr float devColorFreq = 1.0f;
+	static constexpr float minColorFreq = 0.6f;
+	static constexpr float maxColorFreq = 4.0f;
+	static constexpr float meanRadiusAmplitude = 0.5f;
+	static constexpr float devRadiusAmplitude = 0.3f;
+	static constexpr float minRadiusAmplitude = 0.1f;
+	static constexpr float maxRadiusAmplitude = 0.9f;
+	static constexpr float meanRadiusFreq = 1.8f;
+	static constexpr float devRadiusFreq = 1.0f;
+	static constexpr float minRadiusFreq = 0.6f;
+	static constexpr float maxRadiusFreq = 4.0f;
+	// game objects
+	FrameTimer ft;
+	Camera cam;
 	std::vector<StarBro> stars;
 };
